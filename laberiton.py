@@ -10,6 +10,7 @@ laberinto = [
     ['x','x','x','x','s']
     ]
 '''
+
 #laberinto 2
 '''
 laberinto = [
@@ -20,6 +21,7 @@ laberinto = [
     ['x','x','x','x','s','x']
     ]
 '''
+
 #laberinto 3
 '''
 laberinto = [
@@ -36,6 +38,7 @@ laberinto = [
     ['x','x','s','x','x','x','x','x','x']
 ]
 '''
+
 #laberinto 4
 '''
 laberinto = [
@@ -52,6 +55,7 @@ laberinto = [
     ['x','x','x','x','s','x','x','x','x']
 ]
 '''
+
 #laberinto 5
 '''
 laberinto = [
@@ -76,6 +80,7 @@ laberinto = [
     ['x','x','x','x','x','x','x','x','x','x','x']
 ]
 '''
+
 #laberinto 6
 
 laberinto = [
@@ -114,43 +119,50 @@ def DibujarLaberinto():
 
 def RecorrerLaberinto2(i,j,direccion):
     PasoAnterior = []
-    if laberinto[i][j] == "s":
-        print("\npasos para salir: ",len(camino))
-        print("\nPasos:\n",pasos,"\n")
-        print("\nCamino:\n",camino,"\n")
-        DibujarLaberinto() 
-    else:   
-        if i > len(laberinto)-1:
-            RecorrerLaberinto2(i-1,j, "izquierda")
-        elif i < 0:
-            RecorrerLaberinto2(i+1, j+1, "arriba")
-        elif j > len(laberinto[i])-1:
-            RecorrerLaberinto2(i+1, j-1, "abajo")
-        elif j < 0:
-            RecorrerLaberinto2(i-1, j+1, "arriba")
-        else:
-            if laberinto[i][j] == " ":
-                pasos.append(direccion)      
-                laberinto[i][j] = "·"
-                #DibujarLaberinto()
-                camino.append([i,j])
-                RecorrerLaberinto2(i,j+1, "derecha")    
-            elif (laberinto[i][j] == "x" or laberinto[i][j] == "·" or laberinto[i][j] == "-") and direccion == "derecha":
-                RecorrerLaberinto2(i+1, j-1, "abajo")
-            elif (laberinto[i][j] == "x" or laberinto[i][j] == "·" or laberinto[i][j] == "-") and direccion == "abajo":
-                RecorrerLaberinto2(i-1, j-1, "izquierda")
-            elif (laberinto[i][j] == "x" or laberinto[i][j] == "·" or laberinto[i][j] == "-") and direccion == "izquierda":
-                RecorrerLaberinto2(i-1, j+1, "arriba")
-            elif (laberinto[i][j] == "x" or laberinto[i][j] == "·" or laberinto[i][j] == "-") and direccion == "arriba":
-                #print("Sin salida")
+    if i > len(laberinto)-1:
+        RecorrerLaberinto2(i-1,j, "←")
+    elif i < 0:
+        RecorrerLaberinto2(i+1, j+1, "↑")
+    elif j > len(laberinto[i])-1:
+        RecorrerLaberinto2(i+1, j-1, "↓")
+    elif j < 0:
+        RecorrerLaberinto2(i-1, j+1, "↑")
+    else:
+        if laberinto[i][j] == "s":
+            pasos.append(direccion)
+            PasoAnterior = camino[-1]
+            laberinto[PasoAnterior[0]][PasoAnterior[1]] = pasos[-1]
+            camino.append([i,j])
+            print("\npasos para salir: ",len(camino))
+            print("\nPasos:\n",pasos,"\n")
+            print("\nCamino:\n",camino,"\n")
+            DibujarLaberinto()
+        elif laberinto[i][j] == " ":
+            if len(camino) == 0:
+                laberinto[i][j] = direccion
+            else:
+                pasos.append(direccion)
                 PasoAnterior = camino[-1]
-                laberinto[PasoAnterior[0]][PasoAnterior[1]] = "-"
-                camino.pop(-1)
-                pasos.pop(-1)
-                PasoAnterior = camino[-1]
-                RecorrerLaberinto2(PasoAnterior[0],PasoAnterior[1]+1,"derecha")
+                laberinto[PasoAnterior[0]][PasoAnterior[1]] = pasos[-1]
+            #DibujarLaberinto()
+            camino.append([i,j])
+            RecorrerLaberinto2(i,j+1, "→")    
+        elif (laberinto[i][j] == "x" or laberinto[i][j] == "-" or laberinto[i][j] == "→" or laberinto[i][j] == "↓" or laberinto[i][j] == "←" or laberinto[i][j] == "↑") and direccion == "→":
+            RecorrerLaberinto2(i+1, j-1, "↓")
+        elif (laberinto[i][j] == "x" or laberinto[i][j] == "-" or laberinto[i][j] == "→" or laberinto[i][j] == "↓" or laberinto[i][j] == "←" or laberinto[i][j] == "↑") and direccion == "↓":
+            RecorrerLaberinto2(i-1, j-1, "←")
+        elif (laberinto[i][j] == "x" or laberinto[i][j] == "-" or laberinto[i][j] == "→" or laberinto[i][j] == "↓" or laberinto[i][j] == "←" or laberinto[i][j] == "↑") and direccion == "←":
+            RecorrerLaberinto2(i-1, j+1, "↑")
+        elif (laberinto[i][j] == "x" or laberinto[i][j] == "-" or laberinto[i][j] == "→" or laberinto[i][j] == "↓" or laberinto[i][j] == "←" or laberinto[i][j] == "↑") and direccion == "↑":
+            #print("Sin salida")
+            PasoAnterior = camino[-1]
+            laberinto[PasoAnterior[0]][PasoAnterior[1]] = "-"
+            camino.pop(-1)
+            pasos.pop(-1)
+            PasoAnterior = camino[-1]
+            RecorrerLaberinto2(PasoAnterior[0],PasoAnterior[1]+1,"→")
     
 pasos = []       
 camino = []
 DibujarLaberinto()
-RecorrerLaberinto2(0,1, "abajo")                                
+RecorrerLaberinto2(0,1, " ")                                
